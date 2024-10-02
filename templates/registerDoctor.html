@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<!-- Mirrored from dreamguys.co.in/demo/doccure/admin/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Nov 2019 04:12:53 GMT -->
+<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <title>Doccure - Register</title>
+		
+		<!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="../static/assets/img/favicon.png">
+
+		<!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css">
+		
+		<!-- Fontawesome CSS -->
+        <link rel="stylesheet" href="../static/assets/css/font-awesome.min.css">
+		
+		<!-- Main CSS -->
+        <link rel="stylesheet" href="../static/assets/css/style.css">
+		
+		<!--[if lt IE 9]>
+			<script src="../static/assets/js/html5shiv.min.js"></script>
+			<script src="../static/assets/js/respond.min.js"></script>
+		<![endif]-->
+    </head>
+    <body>
+	
+		<!-- Main Wrapper -->
+        <div class="main-wrapper login-body">
+            <div class="login-wrapper">
+            	<div class="container">
+                	<div class="loginbox">
+                    	<div class="login-left">
+							<img class="img-fluid" src="../static/assets/img/logo-white.png" alt="Logo">
+                        </div>
+                        <div class="login-right">
+							<div class="login-right-wrap">
+							    <h1>Register</h1>	
+                               <a href="{{url_for('registerDoctor')}}"> <div class="text-center dont-have">Are you a doctor?</div></a>						
+								{%if x== 0%}
+                                <div class="alert alert-danger" role="alert">
+                                    {{message}}
+                                  </div>
+                                {%endif%}
+                               <!-- Form -->
+								<form action="{{url_for('register_checkD')}}" method="POST" id="form">
+									<div class="form-group">
+										<input class="form-control" name="name" type="text" placeholder="Full Name">
+									</div>
+                                    <div class="form-group">
+                                        <select class="form-control" name="spec" id="spec">
+                                            <option value=”” disabled selected >Speciality</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" name="sexe" id="sexe">
+                                            <option value=”” disabled selected >Sexe</option>
+                                            <option value="female"> Female</option>
+                                            <option value="male"> Male</option>
+                                        </select>
+                                    </div>
+									<div class="form-group">
+										<input class="form-control" name="email" type="email" placeholder="Email">
+									</div>
+									<div class="form-group">
+										<input class="form-control" name="pwd" type="password" placeholder="Password" id="pwd">
+									</div>
+									<div class="form-group">
+										<input class="form-control" type="password" placeholder="Confirm Password" id="cpwd">
+									</div>
+									<div class="form-group mb-0">
+										<button class="btn btn-primary btn-block" type="submit">Register</button>
+                                        <span id="alert"></span>
+									</div>
+								</form>
+								<!-- /Form -->
+								<div class="text-center dont-have">Already have an account? <a href="{{url_for('signin')}}">Login</a></div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!-- /Main Wrapper -->
+		
+		<!-- jQuery -->
+        <script src="../static/assets/js/jquery-3.2.1.min.js"></script>
+		
+		<!-- Bootstrap Core JS -->
+        <script src="../static/assets/js/popper.min.js"></script>
+        <script src="../static/assets/js/bootstrap.min.js"></script>
+		
+		<!-- Custom JS -->
+		<script src="../static/assets/js/script.js"></script>
+		
+    </body>
+<script>
+    getSpec();
+    myform = document.getElementById('form');
+    champs = document.getElementsByClassName("form-control");
+    pwd = document.getElementById('pwd');
+    cpwd = document.getElementById('cpwd');
+    myform.addEventListener('submit',function(e){
+        for(champ of champs){
+            if (champ.value == ''){
+                let alert= document.getElementById('alert').innerHTML='<br><div class="alert alert-danger alert-dismissible fade show" role="alert">You must fill all fields</div>';
+                e.preventDefault();
+            }
+        }
+        if (pwd.value != cpwd.value) {
+            let alert= document.getElementById('alert').innerHTML='<br><div class="alert alert-danger alert-dismissible fade show" role="alert">Both passwords must be identical</div>';
+            e.preventDefault();
+        }
+    })
+
+    function getSpec(){
+        httpRequest = new XMLHttpRequest();
+        httpRequest.open('GET', '/api/spec');
+        httpRequest.onreadystatechange = createSelect;
+        httpRequest.send();
+        }
+    
+    function createSelect(){
+        if(httpRequest.readyState === XMLHttpRequest.DONE){
+        if(httpRequest.status === 200){
+          reponse = httpRequest.responseText;
+          specs =JSON.parse(reponse);
+          let selec= document.getElementById('spec');
+         for (spe of specs) {
+        // let newspec = '<option value="'+spe['name']+'">'+spe['name']+'</option>'
+        // console.log(newspec);
+        // console.log(selec.childNodes);
+        opt= document.createElement('option');
+        opt.setAttribute('value',spe['name']);
+        opt.innerText= spe['name'];
+        selec.append(opt);
+      }
+        }
+      }
+    }
+</script>
+<!-- Mirrored from dreamguys.co.in/demo/doccure/admin/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Nov 2019 04:12:53 GMT -->
+</html>
